@@ -1,0 +1,42 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account information and settings",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "securityEnabled": { "type": "boolean" },
+        "pin": { "type": "string" }
+      },
+      "required": ["email", "createdAt"]
+    },
+    "JournalEntry": {
+      "title": "Journal Entry",
+      "description": "A personal diary entry with mood analysis",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "content": { "type": "string" },
+        "date": { "type": "string" },
+        "mood": { "type": "string" },
+        "tip": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "colorClass": { "type": "string" }
+      },
+      "required": ["userId", "content", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Individual user profiles"
+    },
+    "/users/{userId}/entries/{entryId}": {
+      "schema": "JournalEntry",
+      "description": "Personal journal entries for a specific user"
+    }
+  }
+}

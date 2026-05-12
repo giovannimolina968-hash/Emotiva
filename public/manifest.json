@@ -1,0 +1,17 @@
+{
+  "name": "Emotiva",
+  "short_name": "Emotiva",
+  "description": "Tu espacio personal para entender tus emociones.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF9F5",
+  "theme_color": "#EC4899",
+  "icons": [
+    {
+      "src": "/emotiva_icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

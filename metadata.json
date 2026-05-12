@@ -1,0 +1,10 @@
+{
+  "name": "Emotiva",
+  "description": "Tu espacio personal para entender tus emociones y conversar con una IA que te escucha como un psicólogo.",
+  "requestFramePermissions": [
+    "publickey-credentials-get",
+    "publickey-credentials-create",
+    "microphone"
+  ],
+  "majorCapabilities": ["AI-powered reflection", "Mood analysis", "Therapeutic AI chat"]
+}

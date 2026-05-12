@@ -1,0 +1,52 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Allow connectivity test
+    match /test/connection {
+      allow read: if true;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidUser(data) {
+      return data.email is string && data.email.size() <= 128;
+    }
+
+    function isValidEntry(data) {
+      return data.keys().hasAll(['userId', 'content', 'timestamp']) &&
+             data.userId == request.auth.uid &&
+             data.content is string && data.content.size() <= 10000 &&
+             data.timestamp is timestamp;
+    }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && isValidUser(request.resource.data);
+      
+      match /entries/{entryId} {
+        allow list: if isOwner(userId);
+        allow get: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidEntry(request.resource.data);
+        allow update: if isOwner(userId) && isValidEntry(request.resource.data) &&
+                        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['content', 'mood', 'tip', 'colorClass']);
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}
